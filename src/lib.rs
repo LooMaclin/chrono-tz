@@ -146,6 +146,9 @@
 //! ```
 
 extern crate chrono;
+#[macro_use]
+extern crate derive_diff;
+extern crate struct_diff;
 
 #[cfg(feature = "serde")]
 mod serde;

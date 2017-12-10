@@ -59,10 +59,11 @@ fn convert_bad_chars(name: &str) -> String {
 // TimeZone for any contained struct that implements `Timespans`.
 fn write_timezone_file(timezone_file: &mut File, table: &Table) {
     let zones = table.zonesets.keys().chain(table.links.keys()).collect::<BTreeSet<_>>();
+
     write!(timezone_file, "use ::timezone_impl::{{TimeSpans, FixedTimespanSet, FixedTimespan}};\n",).unwrap();
     write!(timezone_file, "use std::fmt::{{Debug, Formatter, Error}};\n\n",).unwrap();
     write!(timezone_file, "use std::str::FromStr;\n\n",).unwrap();
-    write!(timezone_file, "#[derive(Clone, Copy, PartialEq, Eq)]\npub enum Tz {{\n").unwrap();
+    write!(timezone_file, "#[derive(Clone, Copy, PartialEq, Eq, Ord, PartialOrd, Hash, Diff)]\npub enum Tz {{\n").unwrap();
     for zone in &zones {
         let zone_name = convert_bad_chars(zone);
         write!(timezone_file, "    {zone},\n", zone = zone_name).unwrap();
